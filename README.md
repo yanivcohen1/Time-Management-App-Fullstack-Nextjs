@@ -1,4 +1,4 @@
-## EdgeStack Todos
+## Time-Management-App
 
 Full-stack Next.js 16 application built with Material UI, MikroORM, and MongoDB 3.4. The app implements email/password authentication, short-lived JWT access tokens with refresh rotation, rate limiting, and filterable todo lists backed by React Query.
 
