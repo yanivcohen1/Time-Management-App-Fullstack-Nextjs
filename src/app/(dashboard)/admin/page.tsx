@@ -1,11 +1,16 @@
 "use client";
 
+import { ReactNode } from "react";
 import { Box, Button, CircularProgress, Paper, Stack, Typography } from "@mui/material";
 import { InterWorkspaceSection } from "@/components/dashboard/InterWorkspaceSection";
 import { useSession } from "@/hooks/useAuth";
 import { tokenStorage } from "@/lib/http/token-storage";
 
-export default function AdminPage() {
+type AdminPageLayoutProps = {
+  children?: ReactNode;
+};
+
+export function AdminPageLayout({ children }: AdminPageLayoutProps) {
   const { data: session, isLoading: sessionLoading, isError: sessionError } = useSession();
   const hasToken = !!tokenStorage.getAccessToken();
 
@@ -51,11 +56,13 @@ export default function AdminPage() {
             </Stack>
           </Paper>
 
-          <Paper sx={{ p: 3, borderRadius: 3 }}>
-            <InterWorkspaceSection />
-          </Paper>
+          {children}
         </Stack>
       </Box>
     </main>
   );
+}
+
+export default function AdminPage() {
+  return <AdminPageLayout />;
 }
