@@ -20,6 +20,8 @@ export type DashboardSidebarProps = {
   onNavigate?: () => void;
 };
 
+const DASHBOARD_PATH = "/dashboard";
+
 type NavItem = {
   label: string;
   icon: ReactNode;
@@ -28,14 +30,14 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { label: "Main", icon: <HomeRoundedIcon />, href: "#main-section" },
-  { label: "Todo", icon: <ChecklistRoundedIcon />, href: "#todo-section" },
+  { label: "Main", icon: <HomeRoundedIcon />, href: `${DASHBOARD_PATH}#main-section` },
+  { label: "Todo", icon: <ChecklistRoundedIcon />, href: `${DASHBOARD_PATH}#todo-section` },
   {
     label: "User",
     icon: <PersonRoundedIcon />,
     children: [
-      { label: "Inter", icon: <DescriptionRoundedIcon />, href: "#inter-section" },
-      { label: "Admin", icon: <ShieldRoundedIcon />, href: "#admin-section" }
+      { label: "Inter", icon: <DescriptionRoundedIcon />, href: `${DASHBOARD_PATH}#inter-section` },
+      { label: "Admin", icon: <ShieldRoundedIcon />, href: `${DASHBOARD_PATH}#admin-section` }
     ]
   }
 ];
@@ -86,14 +88,24 @@ export function DashboardSidebar({ onNavigate }: DashboardSidebarProps) {
     if (!href) {
       return false;
     }
-    if (href.startsWith("#")) {
-      if (typeof window === "undefined") {
-        return href === "#main-section";
-      }
-      const currentHash = window.location.hash || "#main-section";
-      return currentHash === href;
+
+    const [pathPart, hashPart] = href.split("#");
+    const normalizedHash = hashPart ? `#${hashPart}` : undefined;
+
+    if (pathPart && pathPart !== pathname) {
+      return false;
     }
-    return pathname === href;
+
+    if (!hashPart) {
+      return pathname === (pathPart || pathname);
+    }
+
+    if (typeof window === "undefined") {
+      return normalizedHash === "#main-section";
+    }
+
+    const currentHash = window.location.hash || "#main-section";
+    return currentHash === `#${hashPart}`;
   };
 
   const isAuthenticated = Boolean(session?.user);

@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Box, Button, CircularProgress, Paper, Stack, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { TodoFilters } from "@/components/todos/TodoFilters";
 import { TodoList } from "@/components/todos/TodoList";
 import { TodoDialog } from "@/components/todos/TodoDialog";
+import { TodoStatusSummary } from "@/components/todos/TodoStatusSummary";
 import { useSession, useLogout } from "@/hooks/useAuth";
 import { useCreateTodo, useDeleteTodo, useTodos, useUpdateTodo } from "@/hooks/useTodos";
 import { tokenStorage } from "@/lib/http/token-storage";
@@ -23,7 +24,9 @@ export default function DashboardPage() {
   const { mutateAsync: deleteTodo } = useDeleteTodo();
   const { mutateAsync: logout } = useLogout();
 
+  const unfilteredQueryKey = useMemo<Partial<TodoFilterInput>>(() => ({}), []); // keep overview independent from filters
   const { data: todosData, isLoading: todosLoading } = useTodos(filters);
+  const { data: summaryData, isLoading: summaryLoading } = useTodos(unfilteredQueryKey);
 
   const handleSave = async (values: UpsertTodoInput) => {
     if (values.id) {
@@ -76,10 +79,23 @@ export default function DashboardPage() {
     );
   }
 
+  const summaryTodos = summaryData?.todos ?? todosData?.todos;
+  const isSummaryLoading = summaryLoading && !summaryTodos?.length;
+
   return (
-    <main id="main-section">
+    <main>
       <Box sx={{ px: { xs: 2, md: 6 }, py: 6 }}>
-        <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" alignItems="center" spacing={3}>
+        <Box id="main-section">
+          <TodoStatusSummary todos={summaryTodos} isLoading={isSummaryLoading} />
+        </Box>
+
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          justifyContent="space-between"
+          alignItems="center"
+          spacing={3}
+          mt={6}
+        >
           <div>
             <Typography variant="h4" fontWeight={700}>
               Welcome back, {session.user.name}
@@ -98,7 +114,7 @@ export default function DashboardPage() {
           </Stack>
         </Stack>
 
-        <Box mt={4} id="todo-section">
+        <Box mt={6} id="todo-section">
           <TodoFilters filters={filters} setFilters={setFilters} />
         </Box>
 
