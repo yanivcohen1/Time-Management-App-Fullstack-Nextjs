@@ -21,7 +21,7 @@ export default function RegisterPage() {
               error={error?.message ?? null}
               onSubmit={async (values) => {
                 await mutateAsync(values);
-                router.replace("/dashboard");
+                router.replace("/main");
               }}
             />
             <Typography variant="body2" mt={3} textAlign="center">

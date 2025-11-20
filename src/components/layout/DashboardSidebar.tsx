@@ -6,7 +6,6 @@ import { ReactNode, useMemo, useState } from "react";
 import { Avatar, Box, Button, Collapse, Divider, List, ListItemButton, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import ChecklistRoundedIcon from "@mui/icons-material/ChecklistRounded";
-import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import ShieldRoundedIcon from "@mui/icons-material/ShieldRounded";
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
@@ -20,8 +19,6 @@ export type DashboardSidebarProps = {
   onNavigate?: () => void;
 };
 
-const DASHBOARD_PATH = "/dashboard";
-
 type NavItem = {
   label: string;
   icon: ReactNode;
@@ -30,14 +27,14 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { label: "Main", icon: <HomeRoundedIcon />, href: `${DASHBOARD_PATH}#main-section` },
-  { label: "Todo", icon: <ChecklistRoundedIcon />, href: `${DASHBOARD_PATH}#todo-section` },
+  { label: "Main", icon: <HomeRoundedIcon />, href: "/main" },
+  { label: "Todo", icon: <ChecklistRoundedIcon />, href: "/todo" },
   {
-    label: "User",
-    icon: <PersonRoundedIcon />,
+    label: "Admin",
+    icon: <ShieldRoundedIcon />,
     children: [
-      { label: "Inter", icon: <DescriptionRoundedIcon />, href: `${DASHBOARD_PATH}#inter-section` },
-      { label: "Admin", icon: <ShieldRoundedIcon />, href: `${DASHBOARD_PATH}#admin-section` }
+      { label: "Console", icon: <ShieldRoundedIcon />, href: "/admin" },
+      { label: "Inter workspace", icon: <DescriptionRoundedIcon />, href: "/admin/nter" }
     ]
   }
 ];
@@ -48,7 +45,7 @@ export function DashboardSidebar({ onNavigate }: DashboardSidebarProps) {
   const { data: session } = useSession();
   const { mutateAsync: logout, isPending: isLoggingOut } = useLogout();
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
-    User: true
+    Admin: true
   });
 
   const initials = useMemo(() => {
@@ -89,23 +86,23 @@ export function DashboardSidebar({ onNavigate }: DashboardSidebarProps) {
       return false;
     }
 
-    const [pathPart, hashPart] = href.split("#");
-    const normalizedHash = hashPart ? `#${hashPart}` : undefined;
-
-    if (pathPart && pathPart !== pathname) {
-      return false;
+    if (!href.includes("#")) {
+      return pathname === href || pathname.startsWith(`${href}/`);
     }
 
+    const [pathPart, hashPart] = href.split("#");
+    const pathMatches = pathPart ? pathname === pathPart : true;
+
     if (!hashPart) {
-      return pathname === (pathPart || pathname);
+      return pathMatches;
     }
 
     if (typeof window === "undefined") {
-      return normalizedHash === "#main-section";
+      return hashPart === "main-section";
     }
 
-    const currentHash = window.location.hash || "#main-section";
-    return currentHash === `#${hashPart}`;
+    const currentHash = window.location.hash.replace(/^#/, "") || "main-section";
+    return pathMatches && currentHash === hashPart;
   };
 
   const isAuthenticated = Boolean(session?.user);

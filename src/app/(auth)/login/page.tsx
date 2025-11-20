@@ -22,7 +22,7 @@ export default function LoginPage() {
               demoPrefill={{ label: "Log demo", email: "demo@todo.dev", password: "ChangeMe123!" }}
               onSubmit={async (values) => {
                 await mutateAsync(values);
-                router.replace("/dashboard");
+                router.replace("/main");
               }}
             />
             <Typography variant="body2" mt={3} textAlign="center">
