@@ -45,6 +45,7 @@ function AdminUserContent({
             sx={{ mt: 1.5 }}
             control={
               <Switch
+                key={`user-${interWorkspaceEnabled ? "on" : "off"}`}
                 color="primary"
                 checked={interWorkspaceEnabled}
                 onChange={(_, checked) => setInterWorkspaceEnabled(checked)}

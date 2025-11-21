@@ -33,10 +33,22 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   const pathname = usePathname();
   const { data: session, isLoading: sessionLoading, isError: sessionError } = useSession();
   const hasToken = !!tokenStorage.getAccessToken();
-  const [interWorkspaceEnabled, setInterWorkspaceEnabled] = useState(false);
   const [activeView, setActiveView] = useState<"admin" | "user">(() => (pathname?.includes("/user/") ? "user" : "admin"));
   const resolvedActiveView = pathname?.startsWith("/admin") ? (pathname.includes("/user/") ? "user" : "admin") : activeView;
-  const transitionKey = pathname ?? resolvedActiveView;
+  const transitionKey = pathname ?? resolvedActiveView ?? "admin";
+  const defaultInterWorkspaceEnabled = pathname?.includes("/user/") ?? false;
+  const [interWorkspaceState, setInterWorkspaceState] = useState<Record<string, boolean>>(() => ({
+    [transitionKey]: defaultInterWorkspaceEnabled
+  }));
+  const interWorkspaceEnabled = interWorkspaceState[transitionKey] ?? defaultInterWorkspaceEnabled;
+  const handleInterWorkspaceToggle = (enabled: boolean) => {
+    setInterWorkspaceState(prev => {
+      if (prev[transitionKey] === enabled) {
+        return prev;
+      }
+      return { ...prev, [transitionKey]: enabled };
+    });
+  };
   const transitionRef = useRef<HTMLDivElement>(null);
 
   const breadcrumbItems: MenuItem[] = useMemo(
@@ -100,7 +112,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   }
 
   return (
-    <AdminSwitchContext.Provider value={{ interWorkspaceEnabled, setInterWorkspaceEnabled }}>
+    <AdminSwitchContext.Provider value={{ interWorkspaceEnabled, setInterWorkspaceEnabled: handleInterWorkspaceToggle }}>
       <main>
         <Box sx={{ px: { xs: 2, md: 6 }, py: 6 }}>
           <Stack spacing={3}>
@@ -128,9 +140,10 @@ export function AdminLayout({ children }: AdminLayoutProps) {
               <FormControlLabel
                 control={
                   <Switch
+                    key={`${transitionKey}-${interWorkspaceEnabled ? "on" : "off"}`}
                     color="primary"
                     checked={interWorkspaceEnabled}
-                    onChange={(_, checked) => setInterWorkspaceEnabled(checked)}
+                    onChange={(_, checked) => handleInterWorkspaceToggle(checked)}
                   />
                 }
                 label={interWorkspaceEnabled ? "User workspace enabled" : "User workspace disabled"}
