@@ -24,12 +24,14 @@ export function TodoFilters({ filters, setFilters }: Props) {
       <TextField
         select
         fullWidth
+        size="small"
         label="Status"
         value={filters.status ?? ""}
         onChange={(event) => {
           const value = event.target.value as TodoStatus | "";
           setFilters((prev) => ({ ...prev, status: value || undefined }));
         }}
+        sx={{ "& .MuiInputBase-root": { height: 40 } }}
       >
         {statusOptions.map((option) => (
           <MenuItem key={option.label} value={option.value}>
@@ -42,10 +44,12 @@ export function TodoFilters({ filters, setFilters }: Props) {
         label="Search"
         placeholder="Search title or description"
         fullWidth
+        size="small"
         value={filters.search ?? ""}
         onChange={(event) =>
           setFilters((prev) => ({ ...prev, search: event.target.value || undefined }))
         }
+        sx={{ "& .MuiInputBase-root": { height: 40 } }}
       />
 
       <Stack direction={{ xs: "column", md: "row" }} spacing={2} sx={{ minWidth: 280 }}>
@@ -58,7 +62,13 @@ export function TodoFilters({ filters, setFilters }: Props) {
               dueStart: value ?? undefined
             }))
           }
-          slotProps={{ textField: { fullWidth: true } }}
+          slotProps={{
+            textField: {
+              fullWidth: true,
+              size: "small",
+              sx: { "& .MuiInputBase-root": { height: 40 } }
+            }
+          }}
         />
         <DatePicker
           label="Due end"
@@ -69,7 +79,13 @@ export function TodoFilters({ filters, setFilters }: Props) {
               dueEnd: value ?? undefined
             }))
           }
-          slotProps={{ textField: { fullWidth: true } }}
+          slotProps={{
+            textField: {
+              fullWidth: true,
+              size: "small",
+              sx: { "& .MuiInputBase-root": { height: 40 } }
+            }
+          }}
         />
       </Stack>
     </Stack>

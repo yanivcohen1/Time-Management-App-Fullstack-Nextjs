@@ -18,7 +18,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { TodoFilters } from "@/components/todos/TodoFilters";
 import { TodoList } from "@/components/todos/TodoList";
 import { TodoDialog } from "@/components/todos/TodoDialog";
-import { useSession, useLogout } from "@/hooks/useAuth";
+import { useSession } from "@/hooks/useAuth";
 import { useCreateTodo, useDeleteTodo, useTodos, useUpdateTodo } from "@/hooks/useTodos";
 import { tokenStorage } from "@/lib/http/token-storage";
 import type { TodoFilterInput, UpsertTodoInput } from "@/lib/validation/todo";
@@ -35,7 +35,6 @@ export default function TodoPage() {
   const { mutateAsync: createTodo, isPending: isCreating } = useCreateTodo();
   const { mutateAsync: updateTodo, isPending: isUpdating } = useUpdateTodo();
   const { mutateAsync: deleteTodo, isPending: isDeleting } = useDeleteTodo();
-  const { mutateAsync: logout } = useLogout();
 
   const { data: todosData, isLoading: todosLoading } = useTodos(filters);
 
@@ -122,9 +121,6 @@ export default function TodoPage() {
             </Typography>
           </div>
           <Stack direction="row" spacing={2}>
-            <Button variant="outlined" onClick={async () => await logout()}>
-              Sign out
-            </Button>
             <Button startIcon={<AddIcon />} onClick={() => openDialogForTodo()}>
               New todo
             </Button>
