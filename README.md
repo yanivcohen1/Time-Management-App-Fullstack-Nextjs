@@ -100,7 +100,7 @@ Use the Todo page "Show user info" button to verify which account is active; the
 ├── eslint.config.mjs      # Next.js lint configuration
 ├── mikro-orm.config.ts    # MikroORM + Mongo connection + seeding config
 ├── next.config.ts         # Next.js runtime config
-├── cypress.config.ts   # Cypress runner configuration
+├── cypress.config.ts      # Cypress runner configuration
 ├── vitest.config.ts       # Vitest test runner configuration
 └── package.json           # Scripts and dependencies
 ```
