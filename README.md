@@ -142,5 +142,6 @@ Reports include test results, screenshots of failures, and detailed logs. The HT
 
 ### Mobile mode
 
-<img width="1321" height="1410" alt="image" src="https://github.com/user-attachments/assets/f981f340-8d60-4a78-9cb3-854907b9fa55" />
+<img width="1319" height="1424" alt="image" src="https://github.com/user-attachments/assets/17783e4f-6f29-4173-9422-29c5a7835947" />
+
 
