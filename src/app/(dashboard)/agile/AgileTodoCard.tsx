@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Card, CardContent, Typography, IconButton, TextField, Stack, Box, useTheme } from "@mui/material";
-import { Edit as EditIcon, Save as SaveIcon, Close as CloseIcon } from "@mui/icons-material";
+import { Card, CardContent, Typography, IconButton, TextField, Stack, Box, useTheme, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from "@mui/material";
+import { Edit as EditIcon, Save as SaveIcon, Close as CloseIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { DraggableProvided, DraggableStateSnapshot } from "@hello-pangea/dnd";
 import { TodoDTO } from "@/types/todo";
@@ -11,14 +11,16 @@ interface AgileTodoCardProps {
   provided: DraggableProvided;
   snapshot: DraggableStateSnapshot;
   updateTodo: (data: UpsertTodoInput) => void;
+  deleteTodo: (id: string) => void;
 }
 
-export function AgileTodoCard({ todo, provided, snapshot, updateTodo }: AgileTodoCardProps) {
+export function AgileTodoCard({ todo, provided, snapshot, updateTodo, deleteTodo }: AgileTodoCardProps) {
   const theme = useTheme();
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(todo.title);
   const [description, setDescription] = useState(todo.description || "");
   const [dueDate, setDueDate] = useState<Date | null>(todo.dueDate ? new Date(todo.dueDate) : null);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   const { innerRef, draggableProps, dragHandleProps } = provided;
 
@@ -41,52 +43,93 @@ export function AgileTodoCard({ todo, provided, snapshot, updateTodo }: AgileTod
     setIsEditing(false);
   };
 
+  const handleDeleteClick = () => {
+    setOpenDeleteDialog(true);
+  };
+
+  const handleConfirmDelete = () => {
+    deleteTodo(todo.id);
+    setOpenDeleteDialog(false);
+  };
+
+  const handleCancelDelete = () => {
+    setOpenDeleteDialog(false);
+  };
+
   if (isEditing) {
     return (
-      <Card
-        ref={innerRef}
-        {...draggableProps}
-        sx={{
-          cursor: "default",
-          ...draggableProps.style,
-          opacity: snapshot.isDragging ? 0.8 : 1
-        }}
-      >
-        <CardContent>
-          <Stack spacing={2}>
-            <TextField
-              fullWidth
-              size="small"
-              label="Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              size="small"
-              label="Description"
-              multiline
-              rows={2}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-            <DatePicker
-              label="Due Date"
-              value={dueDate}
-              onChange={(newValue) => setDueDate(newValue)}
-              slotProps={{ textField: { size: "small", fullWidth: true } }}
-            />
-            <Stack direction="row" justifyContent="flex-end" spacing={1}>
-              <IconButton size="small" onClick={handleCancel} color="error">
-                <CloseIcon fontSize="small" />
-              </IconButton>
-              <IconButton size="small" onClick={handleSave} color="primary">
-                <SaveIcon fontSize="small" />
-              </IconButton>
+      <>
+        <Card
+          ref={innerRef}
+          {...draggableProps}
+          sx={{
+            cursor: "default",
+            ...draggableProps.style,
+            opacity: snapshot.isDragging ? 0.8 : 1
+          }}
+        >
+          <CardContent>
+            <Stack spacing={2}>
+              <TextField
+                fullWidth
+                size="small"
+                label="Title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                size="small"
+                label="Description"
+                multiline
+                rows={2}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+              <DatePicker
+                label="Due Date"
+                value={dueDate}
+                onChange={(newValue) => setDueDate(newValue)}
+                slotProps={{ textField: { size: "small", fullWidth: true } }}
+              />
+              <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <IconButton size="small" onClick={handleDeleteClick} color="error">
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+                <Stack direction="row" spacing={1}>
+                  <IconButton size="small" onClick={handleCancel} color="inherit">
+                    <CloseIcon fontSize="small" />
+                  </IconButton>
+                  <IconButton size="small" onClick={handleSave} color="primary">
+                    <SaveIcon fontSize="small" />
+                  </IconButton>
+                </Stack>
+              </Stack>
             </Stack>
-          </Stack>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+        <Dialog
+          open={openDeleteDialog}
+          onClose={handleCancelDelete}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Delete Task?"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure you want to delete this task? This action cannot be undone.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCancelDelete}>Cancel</Button>
+            <Button onClick={handleConfirmDelete} color="error" autoFocus>
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </>
     );
   }
 

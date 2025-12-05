@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Box, Card, CardContent, Chip, Container, Grid, Paper, Stack, Typography, useTheme, Button } from "@mui/material";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
-import { useTodos, useUpdateTodo } from "@/hooks/useTodos";
+import { useTodos, useUpdateTodo, useDeleteTodo } from "@/hooks/useTodos";
 import { TodoStatus, TODO_STATUSES } from "@/types/todo";
 import { tokenStorage } from "@/lib/http/token-storage";
 import { useSession } from "@/hooks/useAuth";
@@ -12,6 +12,7 @@ import { AgileTodoCard } from "./AgileTodoCard";
 export default function AgilePage() {
   const { data, isLoading } = useTodos({});
   const { mutate: updateTodo } = useUpdateTodo();
+  const { mutate: deleteTodo } = useDeleteTodo();
   const theme = useTheme();
   const { isLoading: sessionLoading, isError: sessionError } = useSession();
 
@@ -139,6 +140,7 @@ export default function AgilePage() {
                                   provided={provided}
                                   snapshot={snapshot}
                                   updateTodo={updateTodo}
+                                  deleteTodo={deleteTodo}
                                 />
                               )}
                             </Draggable>
