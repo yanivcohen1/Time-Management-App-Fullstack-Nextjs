@@ -1,6 +1,6 @@
 "use client";
 
-import { DragEvent } from "react";
+import { DragEvent, useEffect, useState } from "react";
 import { Box, Card, CardContent, Chip, Container, Grid, Paper, Stack, Typography, useTheme, Button } from "@mui/material";
 import { useTodos, useUpdateTodo } from "@/hooks/useTodos";
 import { TodoStatus, TODO_STATUSES } from "@/types/todo";
@@ -11,7 +11,14 @@ export default function AgilePage() {
   const { data, isLoading } = useTodos({});
   const { mutate: updateTodo } = useUpdateTodo();
   const theme = useTheme();
-  const { data: session, isLoading: sessionLoading, isError: sessionError } = useSession();
+  const { isLoading: sessionLoading, isError: sessionError } = useSession();
+
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsMounted(true);
+  }, []);
 
   const handleDragStart = (e: DragEvent<HTMLDivElement>, todoId: string) => {
     e.dataTransfer.setData("todoId", todoId);
@@ -39,7 +46,7 @@ export default function AgilePage() {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || !isMounted) {
     return (
       <Container maxWidth="xl" sx={{ py: 4 }}>
         <Typography>Loading...</Typography>
@@ -66,7 +73,7 @@ export default function AgilePage() {
       </Typography>
       <Grid container spacing={3} sx={{ height: "calc(100vh - 200px)" }}>
         {TODO_STATUSES.map((status) => (
-          <Grid item xs={12} md={4} key={status} sx={{ height: "100%" }}>
+          <Grid item xs={12} md={3} key={status} sx={{ height: "100%" }}>
             <Paper
               elevation={0}
               sx={{
@@ -93,7 +100,15 @@ export default function AgilePage() {
                 <Chip
                   label={data?.todos.filter((t) => t.status === status).length || 0}
                   size="small"
-                  color={status === "COMPLETED" ? "success" : status === "IN_PROGRESS" ? "info" : "default"}
+                  color={
+                    status === "COMPLETED"
+                      ? "success"
+                      : status === "IN_PROGRESS"
+                      ? "info"
+                      : status === "PENDING"
+                      ? "warning"
+                      : "default"
+                  }
                 />
               </Box>
               <Box sx={{ p: 2, flexGrow: 1, overflowY: "auto" }}>

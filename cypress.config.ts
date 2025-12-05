@@ -11,9 +11,9 @@ export default defineConfig({
       html: true,
       json: false
     },
-    setupNodeEvents(on, config) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    setupNodeEvents(on, config) {
       if (process.env.CYPRESS_REPORTER === 'cypress-mochawesome-reporter') {
-        require('cypress-mochawesome-reporter/plugin')(on); // eslint-disable-line @typescript-eslint/no-require-imports
+        require('cypress-mochawesome-reporter/plugin')(on);
       }
       // implement node event listeners here
     },

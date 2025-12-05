@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { ReactNode, useMemo, createRef } from "react";
-import { CSSTransition, SwitchTransition, TransitionGroup } from "react-transition-group";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import "@/animation/slide-right.css";
 
 export function AdminPageTransition({ children }: { children: ReactNode }) {

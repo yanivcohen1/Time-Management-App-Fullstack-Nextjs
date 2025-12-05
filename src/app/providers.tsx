@@ -34,6 +34,7 @@ export function RootProviders({ children }: { children: ReactNode }) {
   useEffect(() => {
     const saved = localStorage.getItem("theme-mode") as PaletteMode | null;
     if (saved) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setMode(saved);
     }
   }, []);

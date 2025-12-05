@@ -21,6 +21,7 @@ import { upsertTodoSchema, type UpsertTodoInput } from "@/lib/validation/todo";
 import type { TodoStatus } from "@/types/todo";
 
 const statusOptions: { label: string; value: TodoStatus }[] = [
+  { label: "Backlog", value: "BACKLOG" },
   { label: "Pending", value: "PENDING" },
   { label: "In progress", value: "IN_PROGRESS" },
   { label: "Completed", value: "COMPLETED" }

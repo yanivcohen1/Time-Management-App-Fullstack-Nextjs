@@ -1,8 +1,7 @@
 "use client";
 
 import { FormControlLabel, Paper, Stack, Switch, Typography } from "@mui/material";
-import { useAdminContext } from "../_components/AdminContext";
-import { useEffect, useState, useRef } from "react";
+import { useState } from "react";
 
 export type AdminOverviewCardProps = {
   adminId: string;

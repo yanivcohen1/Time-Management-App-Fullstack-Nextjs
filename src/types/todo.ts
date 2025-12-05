@@ -1,4 +1,4 @@
-export const TODO_STATUSES = ["PENDING", "IN_PROGRESS", "COMPLETED"] as const;
+export const TODO_STATUSES = ["BACKLOG", "PENDING", "IN_PROGRESS", "COMPLETED"] as const;
 
 export type TodoStatus = (typeof TODO_STATUSES)[number];
 

@@ -5,12 +5,14 @@ import { Box, Chip, CircularProgress, Grid, Paper, Stack, Typography } from "@mu
 import { TODO_STATUSES, type TodoDTO, type TodoStatus } from "@/types/todo";
 
 const STATUS_LABELS: Record<TodoStatus, string> = {
+  BACKLOG: "Backlog",
   PENDING: "Pending",
   IN_PROGRESS: "In progress",
   COMPLETED: "Completed"
 };
 
-const STATUS_COLORS: Record<TodoStatus, "warning" | "info" | "success"> = {
+const STATUS_COLORS: Record<TodoStatus, "warning" | "info" | "success" | "default"> = {
+  BACKLOG: "default",
   PENDING: "warning",
   IN_PROGRESS: "info",
   COMPLETED: "success"
@@ -49,7 +51,7 @@ const formatDateLabel = (value?: string | null) => {
   }
 
   const key = date.toISOString().split("T")[0];
-  const formatter = new Intl.DateTimeFormat(undefined, {
+  const formatter = new Intl.DateTimeFormat("en-US", {
     weekday: "short",
     month: "short",
     day: "numeric",
@@ -63,7 +65,9 @@ export function TodoStatusSummary({ todos, isLoading }: TodoStatusSummaryProps) 
   const statusCounts = useMemo(() => {
     const counts = { ...ZERO_COUNTS };
     (todos ?? []).forEach((todo) => {
-      counts[todo.status] += 1;
+      if (counts[todo.status] !== undefined) {
+        counts[todo.status] += 1;
+      }
     });
     return counts;
   }, [todos]);
@@ -74,6 +78,12 @@ export function TodoStatusSummary({ todos, isLoading }: TodoStatusSummaryProps) 
     (todos ?? []).forEach((todo) => {
       const { key, label, sortValue } = formatDateLabel(todo.dueDate);
       const existing = groups.get(key);
+      
+      // Skip invalid statuses to prevent runtime errors or NaN
+      if (!Object.prototype.hasOwnProperty.call(ZERO_COUNTS, todo.status)) {
+        return;
+      }
+
       if (existing) {
         existing.counts[todo.status] += 1;
         existing.total += 1;
@@ -118,7 +128,7 @@ export function TodoStatusSummary({ todos, isLoading }: TodoStatusSummaryProps) 
           <Paper sx={{ p: 3, borderRadius: 3 }}>
             <Grid container spacing={2}>
               {TODO_STATUSES.map((status) => (
-                <Grid item xs={12} sm={4} key={status}>
+                <Grid item xs={12} sm={6} md={3} key={status}>
                   <Stack
                     sx={{
                       border: (theme) => `1px solid ${theme.palette.divider}`,

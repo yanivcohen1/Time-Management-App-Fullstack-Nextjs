@@ -8,6 +8,7 @@ import type { TodoStatus } from "@/types/todo";
 
 const statusOptions = [
   { label: "All statuses", value: "" },
+  { label: "Backlog", value: "BACKLOG" },
   { label: "Pending", value: "PENDING" },
   { label: "In progress", value: "IN_PROGRESS" },
   { label: "Completed", value: "COMPLETED" }

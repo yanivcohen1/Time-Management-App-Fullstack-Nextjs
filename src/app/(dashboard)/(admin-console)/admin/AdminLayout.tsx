@@ -1,20 +1,15 @@
 "use client";
 
-import { ReactNode, createContext, useContext, useState, useMemo } from "react";
+import { createContext, useContext, useState, useMemo } from "react";
 import { Box, Button, CircularProgress, FormControlLabel, Paper, Stack, Switch, Typography } from "@mui/material";
 import { usePathname, useRouter, useParams, useSearchParams } from "next/navigation";
 import { BreadCrumb } from "primereact/breadcrumb";
 import { MenuItem } from "primereact/menuitem";
 import { useSession } from "@/hooks/useAuth";
 import { tokenStorage } from "@/lib/http/token-storage";
-import { AdminPageTransition } from "./_components/AdminPageTransition";
 import { AdminOverviewCard } from "./[adminId]/AdminOverviewCard";
 import { UserOverviewCard } from "./[adminId]/user/[userId]/UserOverviewCard";
 import { AdminProvider } from "./_components/AdminContext";
-
-interface AdminLayoutProps {
-  children: ReactNode;
-}
 
 type AdminSwitchContextValue = {
   interWorkspaceEnabled: boolean;
@@ -31,7 +26,7 @@ export function useAdminSwitch() {
   return context;
 }
 
-export function AdminLayout({ children }: AdminLayoutProps) {
+export function AdminLayout() {
   const router = useRouter();
   const pathname = usePathname();
   const params = useParams();

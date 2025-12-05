@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -37,6 +37,21 @@ export default function TodoPage() {
   const { mutateAsync: deleteTodo, isPending: isDeleting } = useDeleteTodo();
 
   const { data: todosData, isLoading: todosLoading } = useTodos(filters);
+
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return (
+      <Stack alignItems="center" justifyContent="center" minHeight="70vh">
+        <CircularProgress />
+      </Stack>
+    );
+  }
 
   const handleSave = async (values: UpsertTodoInput) => {
     if (values.id) {
