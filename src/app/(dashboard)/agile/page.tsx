@@ -69,7 +69,7 @@ export default function AgilePage() {
   return (
     <Container maxWidth="xl" sx={{ py: 4, height: "100%" }}>
       <Typography variant="h4" fontWeight={700} mb={4}>
-        Scrum Board <small style={{ fontWeight: 1, fontSize: 15 }}> drag&drop</small>
+        Task board <small style={{ fontWeight: 1, fontSize: 15 }}> drag&drop</small>
       </Typography>
       <Grid container spacing={3} sx={{ height: "calc(100vh - 200px)" }}>
         {TODO_STATUSES.map((status) => (
