@@ -8,6 +8,7 @@ export type TodoDTO = {
   description?: string | null;
   status: TodoStatus;
   dueDate?: string | null;
+  duration?: number | null;
   tags?: string[];
   createdAt: string;
   updatedAt: string;

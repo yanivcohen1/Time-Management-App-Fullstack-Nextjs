@@ -7,6 +7,7 @@ export const toTodoDTO = (todo: Todo): TodoDTO => ({
   description: todo.description ?? null,
   status: todo.status,
   dueDate: todo.dueDate ? todo.dueDate.toISOString() : null,
+  duration: todo.duration ?? null,
   tags: todo.tags,
   createdAt: todo.createdAt.toISOString(),
   updatedAt: todo.updatedAt.toISOString()

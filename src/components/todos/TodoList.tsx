@@ -73,6 +73,11 @@ export function TodoList({ todos, onEdit, onDelete }: Props) {
             <CardContent>
               <Stack direction="row" alignItems="center" spacing={2}>
                 <Chip icon={<Icon />} label={meta.label} color={meta.color} variant="outlined" />
+                {todo.duration ? (
+                  <Typography variant="body2" color="text.secondary">
+                    {todo.duration} min
+                  </Typography>
+                ) : null}
                 {todo.dueDate ? (
                   <Typography variant="body2" color="text.secondary" suppressHydrationWarning>
                     Due {format(new Date(todo.dueDate), "PP")} ·

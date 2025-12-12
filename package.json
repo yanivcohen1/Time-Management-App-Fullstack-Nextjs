@@ -10,7 +10,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "coverage": "vitest run --coverage",
-    "db:seed": "ts-node --project tsconfig.scripts.json scripts/seed.ts",
+    "seed:db": "ts-node --project tsconfig.scripts.json scripts/seed.ts",
     "test:e2e": "cross-env CYPRESS_REPORTER=cypress-mochawesome-reporter cypress run --e2e --browser chrome",
     "test:e2e:no-report": "cypress run --e2e --browser chrome"
   },
@@ -38,7 +38,7 @@
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.474.0",
     "mongodb": "5.8.1",
-    "next": "16.0.3",
+    "next": "16.0.10",
     "primeicons": "^7.0.0",
     "primereact": "^10.9.7",
     "react": "19.2.0",

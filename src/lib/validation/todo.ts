@@ -5,6 +5,7 @@ const title = z.string().min(3);
 const description = z.string().max(2000).optional();
 const status = z.enum(TODO_STATUSES).optional();
 const dueDate = z.coerce.date().optional();
+const duration = z.coerce.number().min(0).optional();
 const tags = z.array(z.string()).optional();
 
 export const upsertTodoSchema = z.object({
@@ -13,6 +14,7 @@ export const upsertTodoSchema = z.object({
   description,
   status: z.enum(TODO_STATUSES).default("PENDING"),
   dueDate,
+  duration,
   tags
 });
 

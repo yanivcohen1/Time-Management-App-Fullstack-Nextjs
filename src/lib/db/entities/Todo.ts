@@ -27,6 +27,9 @@ export class Todo {
   @Property({ type: 'date', nullable: true })
   dueDate?: Date;
 
+  @Property({ type: 'number', nullable: true })
+  duration?: number;
+
   @Property({ type: "array", default: [] })
   tags: string[] = [];
 

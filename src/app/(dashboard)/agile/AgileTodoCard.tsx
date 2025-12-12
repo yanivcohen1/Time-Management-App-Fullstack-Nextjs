@@ -20,6 +20,7 @@ export function AgileTodoCard({ todo, provided, snapshot, updateTodo, deleteTodo
   const [title, setTitle] = useState(todo.title);
   const [description, setDescription] = useState(todo.description || "");
   const [dueDate, setDueDate] = useState<Date | null>(todo.dueDate ? new Date(todo.dueDate) : null);
+  const [duration, setDuration] = useState<number | "">(todo.duration ?? "");
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   const { innerRef, draggableProps, dragHandleProps } = provided;
@@ -31,6 +32,7 @@ export function AgileTodoCard({ todo, provided, snapshot, updateTodo, deleteTodo
       description: description || undefined,
       status: todo.status,
       dueDate: dueDate || undefined,
+      duration: duration === "" ? undefined : Number(duration),
       tags: todo.tags
     });
     setIsEditing(false);
@@ -40,6 +42,7 @@ export function AgileTodoCard({ todo, provided, snapshot, updateTodo, deleteTodo
     setTitle(todo.title);
     setDescription(todo.description || "");
     setDueDate(todo.dueDate ? new Date(todo.dueDate) : null);
+    setDuration(todo.duration ?? "");
     setIsEditing(false);
   };
 
@@ -85,6 +88,14 @@ export function AgileTodoCard({ todo, provided, snapshot, updateTodo, deleteTodo
                 rows={2}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+              />
+              <TextField
+                fullWidth
+                size="small"
+                label="Duration (min)"
+                type="number"
+                value={duration}
+                onChange={(e) => setDuration(e.target.value === "" ? "" : Number(e.target.value))}
               />
               <DatePicker
                 label="Due Date"
@@ -159,6 +170,11 @@ export function AgileTodoCard({ todo, provided, snapshot, updateTodo, deleteTodo
         {todo.dueDate && (
           <Typography variant="caption" display="block" mt={1} color="text.secondary">
             Due: {new Date(todo.dueDate).toLocaleDateString()}
+          </Typography>
+        )}
+        {todo.duration && (
+          <Typography variant="caption" display="block" color="text.secondary">
+            Duration: {todo.duration} min
           </Typography>
         )}
         <Box sx={{ position: "absolute", top: 8, right: 8 }}>

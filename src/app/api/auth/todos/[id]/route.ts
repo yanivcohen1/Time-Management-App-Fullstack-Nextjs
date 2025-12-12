@@ -44,6 +44,7 @@ export async function PUT(request: NextRequest, context: RouteContext) {
     todo.description = payload.description;
     todo.status = payload.status;
     todo.dueDate = payload.dueDate;
+    todo.duration = payload.duration;
     todo.tags = payload.tags ?? todo.tags;
 
     await em.flush();

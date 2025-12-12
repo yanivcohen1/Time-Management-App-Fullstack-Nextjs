@@ -76,6 +76,13 @@ export function TodoDialog({ open, initialValues, isSaving, onClose, onSave }: P
             error={!!errors.description}
             helperText={errors.description?.message}
           />
+          <TextField
+            label="Duration (minutes)"
+            type="number"
+            {...register("duration")}
+            error={!!errors.duration}
+            helperText={errors.duration?.message}
+          />
           <Controller
             name="status"
             control={control}

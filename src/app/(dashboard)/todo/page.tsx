@@ -94,6 +94,7 @@ export default function TodoPage() {
         description: todo.description ?? undefined,
         status: todo.status,
         dueDate: todo.dueDate ? new Date(todo.dueDate) : undefined,
+        duration: todo.duration ?? undefined,
         tags: todo.tags
       });
     } else {
