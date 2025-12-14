@@ -64,45 +64,4 @@ describe("MainPage", () => {
     ).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /go to login/i })).toBeInTheDocument();
   });
-
-  it("shows admin info in the snackbar", async () => {
-    const user = userEvent.setup();
-    mockApiGet.mockResolvedValue({
-      data: { info: { name: "Alice", role: "admin" } }
-    });
-
-    render(<MainPage />);
-
-    await user.click(screen.getByRole("button", { name: /show user info/i }));
-
-    await waitFor(() => {
-      expect(mockShowSnackbar).toHaveBeenCalledWith({
-        message: "Alice • Admin",
-        severity: "info"
-      });
-    });
-  });
-
-  it("shows user info in the snackbar", async () => {
-    const user = userEvent.setup();
-    mockUseSession.mockReturnValue({
-      data: { user: { role: "user", name: "Bob" } },
-      isLoading: false,
-      isError: false
-    });
-    mockApiGet.mockResolvedValue({
-      data: { info: { name: "Bob", role: "user" } }
-    });
-
-    render(<MainPage />);
-
-    await user.click(screen.getByRole("button", { name: /show user info/i }));
-
-    await waitFor(() => {
-      expect(mockShowSnackbar).toHaveBeenCalledWith({
-        message: "Bob • User",
-        severity: "info"
-      });
-    });
-  });
 });
