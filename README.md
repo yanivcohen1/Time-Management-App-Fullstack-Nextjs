@@ -134,7 +134,7 @@ Reports include test results, screenshots of failures, and detailed logs. The HT
 
 ## Track Status
 
-<img width="2238" height="1870" alt="image" src="https://github.com/user-attachments/assets/419f6fea-8a0c-49ce-a612-9f585024a2c6" />
+<img width="1977" height="1809" alt="image" src="https://github.com/user-attachments/assets/43427a1d-2d0d-4512-ab3c-91c73c18077b" />
 
 ## Agile Task page
 
