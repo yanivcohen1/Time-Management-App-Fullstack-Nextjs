@@ -16,7 +16,6 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "useDefineForClassFields": false,
-    "baseUrl": ".",
     "plugins": [
       {
         "name": "next"
